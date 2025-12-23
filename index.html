@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evelyn Nuñez | Portfolio Editorial</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="icon.png" type="image/png">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --accent: #d4af37;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff;
+            color: #121212;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+
+        /* Scrollbar Personalizada */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #fff; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+        /* Animaciones de entrada */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            animation: heroIn 1.2s var(--ease-out-expo) forwards;
+        }
+        @keyframes heroIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FIX NITIDEZ BLANCO Y NEGRO */
+        .img-bw {
+            filter: grayscale(100%);
+            transition: filter 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+            will-change: filter, transform;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        .gallery-item:hover .img-bw {
+            filter: grayscale(0%);
+            transform: scale(1.04) translateZ(0);
+        }
+
+        .nav-link .indicator {
+            width: 0;
+            transition: width 0.5s var(--ease-out-expo);
+        }
+        .nav-link.active .indicator {
+            width: 100%;
+        }
+
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+        .gallery-item {
+            transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+        }
+        .gallery-item.hidden-item {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        #portfolio article { cursor: crosshair; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full z-[100] transition-all duration-300">
+        <nav class="w-full px-6 lg:px-12 py-6 flex justify-between items-center bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm" aria-label="Navegación principal">
+            <div class="text-2xl font-black tracking-[-0.05em] uppercase cursor-pointer scroll-to-top">
+                EVELYN <span class="text-[#d4af37]">NUÑEZ</span>
+            </div>
+
+            <div class="hidden md:flex items-center gap-12">
+                <ul class="flex gap-10 text-[12px] uppercase tracking-[0.2em] font-bold text-gray-400">
+                    <li><a href="#portfolio" class="nav-link relative py-2 group transition-colors hover:text-black" data-section="portfolio">Portfolio<span class="indicator absolute -bottom-1 left-0 h-[2px] bg-[#d4af37]"></span></a></li>
+                    <li><a href="#stats" class="nav-link relative py-2 group transition-colors hover:text-black" data-section="stats">Stats<span class="indicator absolute -bottom-1 left-0 h-[2px] bg-[#d4af37]"></span></a></li>
+                    <li><a href="#about" class="nav-link relative py-2 group transition-colors hover:text-black" data-section="about">About<span class="indicator absolute -bottom-1 left-0 h-[2px] bg-[#d4af37]"></span></a></li>
+                    <li><a href="#contact" class="nav-link relative py-2 group transition-colors hover:text-black" data-section="contact">Contact<span class="indicator absolute -bottom-1 left-0 h-[2px] bg-[#d4af37]"></span></a></li>
+                </ul>
+                <a href="#contact" class="bg-black text-white px-8 py-3 text-[11px] uppercase tracking-widest font-black hover:bg-[#d4af37] transition-colors">
+                    Booking Directo
+                </a>
+            </div>
+
+            <button class="md:hidden p-2 text-black" id="menu-btn" aria-label="Abrir menú">
+                <i data-lucide="menu"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <nav id="mobile-menu" class="fixed inset-0 bg-white z-[150] hidden flex flex-col items-center justify-center gap-8 translate-y-[-100%] transition-transform duration-500" aria-label="Menú móvil">
+        <button class="absolute top-8 right-8" id="close-menu" aria-label="Cerrar menú"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <a href="#portfolio" class="text-2xl font-bold uppercase tracking-widest m-link">Portfolio</a>
+        <a href="#stats" class="text-2xl font-bold uppercase tracking-widest m-link">Stats</a>
+        <a href="#about" class="text-2xl font-bold uppercase tracking-widest m-link">About</a>
+        <a href="#contact" class="text-2xl font-bold uppercase tracking-widest text-[#d4af37] m-link">Contacto</a>
+    </nav>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section class="relative h-screen flex items-center justify-center overflow-hidden bg-black text-white">
+            <div class="absolute inset-0 z-0">
+                <img src="img/4.jpg" 
+                     class="w-full h-full object-cover object-[center_25%] opacity-60 scale-110 transition-transform duration-[3s]" 
+                     id="hero-img" alt="Fotografía editorial de Evelyn Nuñez">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20"></div>
+            </div>
+            <div class="relative z-10 text-center space-y-8 px-6">
+                <p class="text-[#d4af37] uppercase tracking-[1em] text-xs font-bold hero-reveal" style="animation-delay: 0.2s">International Freelance Model</p>
+                <h1 class="text-6xl md:text-[10vw] font-serif font-light leading-[0.85] tracking-tighter italic hero-reveal" style="animation-delay: 0.5s">
+                    Visión <br> <span class="not-italic font-medium">Atemporal.</span>
+                </h1>
+                <div class="flex justify-center gap-6 pt-10 hero-reveal" style="animation-delay: 0.8s">
+                    <a href="#portfolio" class="border-b-2 border-[#d4af37] pb-2 text-[11px] uppercase tracking-[0.3em] font-black hover:text-[#d4af37] transition-all">Explorar Obra</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATS SECTION -->
+        <section id="stats" class="py-32 px-6 lg:px-20 max-w-[1400px] mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+                <header class="lg:col-span-4 space-y-6 reveal">
+                    <h2 class="text-sm uppercase tracking-[0.5em] text-[#d4af37] font-black">Composite</h2>
+                    <p class="text-5xl font-serif italic leading-tight">Proporciones & Estética</p>
+                    <p class="text-gray-400 font-light max-w-sm leading-relaxed">Perfil técnico optimizado para alta costura y campañas editoriales de lujo.</p>
+                    <button class="flex items-center gap-4 text-[10px] uppercase tracking-widest font-black border-l-4 border-[#d4af37] pl-4 py-2 hover:text-[#d4af37] transition-colors group">
+                        Descargar Polaroids <i data-lucide="download" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                    </button>
+                </header>
+                
+                <dl class="lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-y-16 gap-x-12" id="stats-grid">
+                    <div class="reveal">
+                        <dt class="text-[10px] uppercase tracking-widest text-gray-300 font-black mb-3">Altura</dt>
+                        <dd class="text-4xl font-light tracking-tight">178 cm</dd>
+                    </div>
+                    <div class="reveal">
+                        <dt class="text-[10px] uppercase tracking-widest text-gray-300 font-black mb-3">Busto</dt>
+                        <dd class="text-4xl font-light tracking-tight">84 cm</dd>
+                    </div>
+                    <div class="reveal">
+                        <dt class="text-[10px] uppercase tracking-widest text-gray-300 font-black mb-3">Cintura</dt>
+                        <dd class="text-4xl font-light tracking-tight">60 cm</dd>
+                    </div>
+                    <div class="reveal">
+                        <dt class="text-[10px] uppercase tracking-widest text-gray-300 font-black mb-3">Cadera</dt>
+                        <dd class="text-4xl font-light tracking-tight">89 cm</dd>
+                    </div>
+                    <div class="reveal">
+                        <dt class="text-[10px] uppercase tracking-widest text-gray-300 font-black mb-3">Calzado</dt>
+                        <dd class="text-4xl font-light tracking-tight">39 EU</dd>
+                    </div>
+                    <div class="reveal">
+                        <dt class="text-[10px] uppercase tracking-widest text-gray-300 font-black mb-3">Ojos</dt>
+                        <dd class="text-4xl font-light tracking-tight">Verdes</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO SECTION -->
+        <section id="portfolio" class="py-32 bg-[#0a0a0a] text-white">
+            <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+                <header class="flex flex-col md:flex-row justify-between items-end mb-20 gap-10">
+                    <div class="reveal">
+                        <h2 class="text-6xl font-serif italic mb-4">Portafolio</h2>
+                        <div class="w-24 h-1 bg-[#d4af37]"></div>
+                    </div>
+                    <nav class="flex flex-wrap gap-8 text-[11px] uppercase tracking-[0.3em] font-black" id="filter-nav" aria-label="Filtro de categorías">
+                        <button class="filter-btn text-[#d4af37] border-b-2 border-[#d4af37] pb-2" data-filter="Todo">Todo</button>
+                        <button class="filter-btn text-gray-600 hover:text-white pb-2 transition-colors" data-filter="Editorial">Editorial</button>
+                        <button class="filter-btn text-gray-600 hover:text-white pb-2 transition-colors" data-filter="Comercial">Comercial</button>
+                        <button class="filter-btn text-gray-600 hover:text-white pb-2 transition-colors" data-filter="Pasarela">Pasarela</button>
+                        <button class="filter-btn text-gray-600 hover:text-white pb-2 transition-colors" data-filter="Beauty">Beauty</button>
+                    </nav>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 min-h-[800px]" id="gallery-grid">
+                    <article class="gallery-item reveal relative aspect-[3/4] overflow-hidden group bg-zinc-900" data-category="Editorial">
+                        <figure class="w-full h-full">
+                            <img src="img/2.jpg" class="w-full h-full object-cover object-center img-bw" alt="Sesión Editorial">
+                            <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10 pointer-events-none">
+                                <p class="text-[#d4af37] text-[10px] uppercase tracking-[0.4em] font-black mb-2">Editorial</p>
+                                <h3 class="text-2xl font-serif italic flex items-center gap-2">Ampliar Vista <i data-lucide="maximize-2" class="w-4 h-4"></i></h3>
+                            </figcaption>
+                        </figure>
+                    </article>
+
+                    <article class="gallery-item reveal relative aspect-[3/4] overflow-hidden group bg-zinc-900" data-category="Comercial">
+                        <figure class="w-full h-full">
+                            <img src="img/5.jpg" class="w-full h-full object-cover object-center img-bw" alt="Sesión Comercial">
+                            <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10 pointer-events-none">
+                                <p class="text-[#d4af37] text-[10px] uppercase tracking-[0.4em] font-black mb-2">Comercial</p>
+                                <h3 class="text-2xl font-serif italic flex items-center gap-2">Ampliar Vista <i data-lucide="maximize-2" class="w-4 h-4"></i></h3>
+                            </figcaption>
+                        </figure>
+                    </article>
+
+                    <article class="gallery-item reveal relative aspect-[3/4] overflow-hidden group bg-zinc-900" data-category="Beauty">
+                        <figure class="w-full h-full">
+                            <img src="img/6.jpg" class="w-full h-full object-cover object-center img-bw" alt="Sesión Beauty">
+                            <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10 pointer-events-none">
+                                <p class="text-[#d4af37] text-[10px] uppercase tracking-[0.4em] font-black mb-2">Beauty</p>
+                                <h3 class="text-2xl font-serif italic flex items-center gap-2">Ampliar Vista <i data-lucide="maximize-2" class="w-4 h-4"></i></h3>
+                            </figcaption>
+                        </figure>
+                    </article>
+
+                    <article class="gallery-item reveal relative aspect-[3/4] overflow-hidden group bg-zinc-900" data-category="Pasarela">
+                        <figure class="w-full h-full">
+                            <img src="img/7.jpg" class="w-full h-full object-cover object-center img-bw" alt="Pasarela">
+                            <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10 pointer-events-none">
+                                <p class="text-[#d4af37] text-[10px] uppercase tracking-[0.4em] font-black mb-2">Pasarela</p>
+                                <h3 class="text-2xl font-serif italic flex items-center gap-2">Ampliar Vista <i data-lucide="maximize-2" class="w-4 h-4"></i></h3>
+                            </figcaption>
+                        </figure>
+                    </article>
+
+                    <article class="gallery-item reveal relative aspect-[3/4] overflow-hidden group bg-zinc-900" data-category="Editorial">
+                        <figure class="w-full h-full">
+                            <img src="img/1.jpg" class="w-full h-full object-cover object-center img-bw" alt="Sesión Editorial">
+                            <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10 pointer-events-none">
+                                <p class="text-[#d4af37] text-[10px] uppercase tracking-[0.4em] font-black mb-2">Editorial</p>
+                                <h3 class="text-2xl font-serif italic flex items-center gap-2">Ampliar Vista <i data-lucide="maximize-2" class="w-4 h-4"></i></h3>
+                            </figcaption>
+                        </figure>
+                    </article>
+
+                    <article class="gallery-item reveal relative aspect-[3/4] overflow-hidden group bg-zinc-900" data-category="Comercial">
+                        <figure class="w-full h-full">
+                            <img src="img/3.jpg" class="w-full h-full object-cover object-center img-bw" alt="Sesión Comercial">
+                            <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10 pointer-events-none">
+                                <p class="text-[#d4af37] text-[10px] uppercase tracking-[0.4em] font-black mb-2">Comercial</p>
+                                <h3 class="text-2xl font-serif italic flex items-center gap-2">Ampliar Vista <i data-lucide="maximize-2" class="w-4 h-4"></i></h3>
+                            </figcaption>
+                        </figure>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="py-32 px-6 lg:px-20 max-w-[1400px] mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                <div class="relative reveal h-[600px] lg:h-[700px]">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 border-t-2 border-l-2 border-[#d4af37] -z-10"></div>
+                    <img src="img/4.jpg" class="w-full h-full object-cover object-top transition-all duration-1000 shadow-2xl" alt="Perfil Profesional de Evelyn Nuñez">
+                </div>
+                <article class="space-y-10 reveal">
+                    <h2 class="text-5xl font-serif italic leading-tight">Independencia <br> & Profesionalismo</h2>
+                    <div class="space-y-6 text-gray-500 text-lg font-light leading-relaxed">
+                        <p>Evelyn Nuñez es una modelo freelance con sede en Milán. Su trabajo destaca por la disciplina técnica y la versatilidad en proyectos editoriales y de pasarela.</p>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6" aria-label="Cualidades profesionales">
+                            <li class="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-black"><i data-lucide="check-circle-2" class="text-[#d4af37] w-5 h-5"></i> Disponibilidad Global</li>
+                            <li class="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-black"><i data-lucide="check-circle-2" class="text-[#d4af37] w-5 h-5"></i> Visa de Trabajo</li>
+                            <li class="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-black"><i data-lucide="check-circle-2" class="text-[#d4af37] w-5 h-5"></i> E-commerce & Editorial</li>
+                            <li class="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-black"><i data-lucide="check-circle-2" class="text-[#d4af37] w-5 h-5"></i> Dirección de Posa</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="relative py-40 bg-white border-t border-gray-100 overflow-hidden">
+            <div class="absolute top-0 right-0 w-1/3 h-full bg-[#fafafa] -z-10 skew-x-[-12deg] translate-x-1/2"></div>
+            <div class="max-w-[1200px] mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+                    <div class="lg:col-span-7 space-y-12 reveal">
+                        <header>
+                            <span class="text-[#d4af37] text-xs uppercase tracking-[0.6em] font-black block mb-4">Get in touch</span>
+                            <h2 class="text-6xl md:text-8xl font-serif italic tracking-tighter leading-none">Creamos algo <br> <span class="text-[#d4af37] not-italic font-medium">Extraordinario.</span></h2>
+                        </header>
+                    </div>
+                    <div class="lg:col-span-5 space-y-8 reveal">
+                        <address class="not-italic space-y-8">
+                            <a href="mailto:bookings@evelynnunez.com" class="group block bg-[#0a0a0a] text-white p-8 hover:bg-[#d4af37] transition-all duration-500">
+                                <div class="flex justify-between items-start mb-6">
+                                    <i data-lucide="mail" class="text-[#d4af37] w-6 h-6 group-hover:text-white transition-colors"></i>
+                                    <i data-lucide="arrow-up-right" class="w-5 h-5 opacity-40 group-hover:opacity-100 transition-all"></i>
+                                </div>
+                                <p class="text-xs uppercase tracking-widest opacity-60 mb-2">Enviar Email</p>
+                                <p class="text-xl md:text-2xl font-light">bookings@evelynnunez.com</p>
+                            </a>
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="#" class="flex items-center justify-center gap-3 p-6 border border-gray-100 hover:border-[#d4af37] transition-all"><i data-lucide="instagram" class="text-[#d4af37] w-5 h-5"></i><span class="text-[10px] font-bold uppercase tracking-widest">Instagram</span></a>
+                                <a href="#" class="flex items-center justify-center gap-3 p-6 border border-gray-100 hover:border-[#d4af37] transition-all"><i data-lucide="message-circle" class="text-[#25D366] w-5 h-5"></i><span class="text-[10px] font-bold uppercase tracking-widest">WhatsApp</span></a>
+                            </div>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-12 bg-white border-t border-gray-100 text-[10px] uppercase tracking-[0.5em] text-gray-400 font-bold px-6 text-center">
+        <p>© 2025 EVELYN NUÑEZ • MODELO INDEPENDIENTE</p>
+        <p class="mt-2 text-[8px] opacity-50">Diseño & Desarrollo por Génesis</p>
+        <button class="mt-8 hover:text-black transition-colors scroll-to-top" aria-label="Volver arriba">Back to top</button>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="fixed inset-0 z-[1000] bg-black/98 opacity-0 pointer-events-none transition-opacity duration-500 flex items-center justify-center p-6 md:p-20" role="dialog" aria-modal="true" aria-label="Vista de imagen ampliada">
+        <button class="absolute top-10 right-10 text-white hover:text-[#d4af37] transition-colors" id="close-lightbox" aria-label="Cerrar vista ampliada"><i data-lucide="x" class="w-10 h-10"></i></button>
+        <div class="relative max-w-full max-h-full scale-90 transition-transform duration-500" id="lightbox-container">
+            <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain shadow-2xl" alt="">
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <script>
+        lucide.createIcons();
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                lenis.scrollTo(this.getAttribute('href'));
+            });
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            let current = "";
+            sections.forEach(section => { if (pageYOffset >= section.offsetTop - 300) current = section.getAttribute('id'); });
+            navLinks.forEach(link => {
+                link.classList.remove('active', 'text-black');
+                if (link.getAttribute('data-section') === current) link.classList.add('active', 'text-black');
+            });
+        });
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+                filterBtns.forEach(b => { b.classList.remove('text-[#d4af37]', 'border-b-2', 'border-[#d4af37]'); b.classList.add('text-gray-600'); });
+                btn.classList.add('text-[#d4af37]', 'border-b-2', 'border-[#d4af37]');
+                galleryItems.forEach(item => {
+                    if (filter === "Todo" || item.getAttribute('data-category') === filter) {
+                        item.classList.remove('hidden-item'); item.style.display = "block";
+                    } else {
+                        item.classList.add('hidden-item'); setTimeout(() => item.style.display = "none", 500);
+                    }
+                });
+            });
+        });
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                lightboxImg.src = item.querySelector('img').src;
+                lightbox.classList.remove('pointer-events-none'); lightbox.classList.add('opacity-100');
+                lenis.stop();
+            });
+        });
+        const closeFn = () => { lightbox.classList.add('pointer-events-none'); lightbox.classList.remove('opacity-100'); lenis.start(); };
+        document.getElementById('close-lightbox').addEventListener('click', closeFn);
+        lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeFn(); });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        window.addEventListener('scroll', () => {
+            const scroll = window.pageYOffset;
+            const heroImg = document.getElementById('hero-img');
+            if(heroImg) heroImg.style.transform = `scale(${1.1 + scroll * 0.0002}) translateY(${scroll * 0.1}px) translateZ(0)`;
+        });
+    </script>
+</body>
+</html>
